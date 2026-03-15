@@ -1,6 +1,4 @@
-# Title
-
-Investigating Service Installation Using Windows Event ID 7045
+# Investigating Service Installation Using Windows Event ID 7045
 
 ## Context
 
@@ -80,10 +78,12 @@ The XML view provides the raw structured data of the event and allows analysts t
 
 ### Event Details Extracted
 
-Service Name: `Surfshark Wireguard Service`
+``` jsx
+Service Name: Surfshark Wireguard Service
 Image Path: `C:\Program Files\...`
-Service Account: `LocalSystem`
-Service Type: `user mode service`
+Service Account: LocalSystem
+Service Type: user mode service
+```
 
 ## Analysis
 
@@ -136,9 +136,11 @@ Security teams should review the following indicators when investigating Event I
 
 Examples:
 
-`svchost32`
-`update_service`
-`winupdatehelper`
+``` jsx
+svchost32
+update_service
+winupdatehelper
+```
 
 ### Unusual File Paths
 
@@ -146,13 +148,17 @@ Services installed outside standard directories should be treated with caution.
 
 Examples:
 
-`C:\Users\Public\`
-`C:\Temp\`
-`C:\ProgramData\`
+``` jsx
+C:\Users\Public\
+C:\Temp\
+C:\ProgramData\
+```
 
 Applications installed in the Program Files directory are more likely to be legitimate, but they should still be verified if the service name or behavior appears suspicious.
 
 ## MITRE ATT&CK Reference
 
-```Technique: T1543.003 – Create or Modify
-System Process: Windows Service```
+``` jsx
+Technique: T1543.003 – Create or Modify
+System Process: Windows Service
+```
