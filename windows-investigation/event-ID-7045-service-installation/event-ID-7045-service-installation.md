@@ -43,10 +43,10 @@ This allowed the system to locate events associated with service installation.
 
 Screenshot – Event search result
 
-![SOC_EventID_7045_Surfshark_GeneralTab.png](/NonCoding/SOC-Analyst-Labs/windows-investigation/event-ID-7045-service-installation/Images/SOC_EventID_7045_Surfshark_GeneralTab.png)
+![SOC_EventID_7045_Surfshark_GeneralTab.png](./Images/SOC_EventID_7045_Surfshark_GeneralTab.png)
 Figure 1. SOC_EventID_7045_Surfshark_GeneralTab
 
-![SOC_EventID_7045_Surfshark_DetailsTab_friendlyView.png](/NonCoding/SOC-Analyst-Labs/windows-investigation/event-ID-7045-service-installation/Images/SOC_EventID_7045_Surfshark_DetailsTab_friendlyView.png)
+![SOC_EventID_7045_Surfshark_DetailsTab_friendlyView.png](./Images/SOC_EventID_7045_Surfshark_DetailsTab_XML-view.png)
 Figure 2. SOC_EventID_7045_Surfshark_DetailsTab_friendlyView
 
 **Step 3** — Refine the Search Using Log Filtering
@@ -57,7 +57,7 @@ This method filters the log directly by event ID, reducing noise and making it e
 
 Screenshot – Filter configuration
 
-![SOC_EventID_7045_Filter.png](/NonCoding/SOC-Analyst-Labs/windows-investigation/event-ID-7045-service-installation/Images/SOC_EventID_7045_Filter.png)
+![SOC_EventID_7045_Filter.png](./Images/SOC_EventID_7045_Filter.png)
 Figure 3. SOC_EventID_7045_Filter
 
 **Step 4** — Review Event Details
@@ -73,7 +73,7 @@ service type
 
 Screenshot – Event details
 
-![SOC_EventID_7045_Surfshark_DetailsTab_XML-view.png](/NonCoding/SOC-Analyst-Labs/windows-investigation/event-ID-7045-service-installation/Images/SOC_EventID_7045_Surfshark_DetailsTab_XML-view.png)
+![SOC_EventID_7045_Surfshark_DetailsTab_XML-view.png](./Images/SOC_EventID_7045_Surfshark_DetailsTab_XML-view.png)
 Figure 4. SOC_EventID_7045_Surfshark_DetailsTab_XML-view
 
 The XML view provides the raw structured data of the event and allows analysts to verify the exact values recorded by the system.
