@@ -32,15 +32,15 @@ Open Windows Event View, filtered the current log, and search for event ID 4688.
 
 ### Inspecting The Process
 
-The process name is `lsass.exe` which is a system process. The creator process name is `wininit.exe` which is another system process. This indicate that the investigated process is a child process of another system process. The reason that investigating the parent and child process is important is because in a normal situation the expected behavior is the expect system process parent create expect system process child. If it is a malicious behavior, the process `lsass.exe` might be created by user process which can be the behavior of an attacker.
+The process name is `lsass.exe` which is a system process. The creator process name is `wininit.exe` which is another system process. This indicate that the investigated process is a child process of another system process. The reason that investigating the parent and child process is important is because in a normal situation the expected behavior is the expected system process parent create expected system process child. If it is a malicious behavior, the process `lsass.exe` might be created by user process which can be the behavior of an attacker.
 
-`wininit.exe` is the expect parent process that creates `lsass.exe`
+`wininit.exe` is the expected parent process that creates `lsass.exe`
 
 ### Checking File Path
 
-Checking the paths, both are in `C:\Windows\System32` which is the usual system application path. Windows separates paths into system-protected paths and user-writable paths. An attacker needs a path with write and excuse permission with or without administration privillege in order to create or run malicious files or process.
+Checking the paths, both are in `C:\Windows\System32` which is the usual system application path. Windows separates paths into system-protected paths and user-writable paths. An attacker needs a path with write and excuted permission with or without administration privilege in order to create or run malicious files or process.
 
-Paths with user-writable and execution without adminisitration rights by default on Windows usually are
+Paths with user-writable and execution without administration rights by default on Windows usually are
 
 ``` jsx
 
@@ -53,7 +53,7 @@ These paths are attackers' initial target paths to download malicious files or c
 
 ### Investigate The User
 
-The next indicator to distingush between a normal expect behaviour and a maclious one is to check the user that runs the process.
+The next indicator to distingush between a normal expect behaviour and a malicious one is to check the user that runs the process.
 
 Baseline SIDs and their meaning:
 
@@ -71,7 +71,7 @@ Patterns recognition of `S-1-5-*`
 
 This tells me that an SID with this pattern is `S-1-5-*` is a Windows built-in system/authority account.
 
-According to the evidence in the screenshot, the SID shown was `S-1-5-18`. It corresponds to the SYSTEM account. This means the user who execused this process is a system user which is the expecting behavior from the process created by `lssas.exe`.
+According to the evidence in the screenshot, the SID shown was `S-1-5-18`. It corresponds to the SYSTEM account. This means the user who executed this process is a system user which is the expecting behavior from the process created by `lsass.exe`.
 
 Malicious user indicator is regular user account creating the original process that supposed to be done by a system account. Then, they escalate their privillege to a system or administrator account to run the process.
 
@@ -84,7 +84,7 @@ TokenElevationType = `%%1936` (default)
 Integrity level = System (expected for `lsass.exe`)
 ```
 
-Default token means no elevation of privilege appears. This showed the expected normal system behavior; therfore there is no privilege escalation attempt found.
+Default token means no elevation of privilege appears. This showed the expected normal system behavior; therefore there is no privilege escalation attempt found.
 
 ## Conclusion
 
@@ -94,6 +94,6 @@ After investigate  file paths and user, the file path `C:\Windows\System32` and 
 
 ## Recommendation
 
-No danger yet. Keep monitoring for malicious software installation or excusion.
+No danger yet. Keep monitoring for malicious software installation or excution.
 
 ## MITRE ATT&CK Reference
