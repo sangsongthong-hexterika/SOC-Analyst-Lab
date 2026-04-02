@@ -32,13 +32,13 @@ Open Windows Event View, filtered the current log, and search for event ID 4688.
 
 ### Inspecting The Process
 
-The process name is `lsass.exe` which is a system process. The creator process name is `wininit.exe` which is another system process. This indicate that the investigated process is a child process of another system process. The reason that investigating the parent and child process is important is because in a normal situation the expected behavior is the expected system process parent create expected system process child. If it is a malicious behavior, the process `lsass.exe` might be created by user process which can be the behavior of an attacker.
+The process name is `lsass.exe` which is a system process. The creator process name is `wininit.exe` which is another system process. This indicates that the investigated process is a child process of another system process. The reason that investigating the parent and child process is important is because in a normal situation the expected behavior is the expected system processes create expected child processes. If it is a malicious behavior, the process `lsass.exe` might be created by user process which can be the behavior of an attacker.
 
 `wininit.exe` is the expected parent process that creates `lsass.exe`
 
 ### Checking File Path
 
-Checking the paths, both are in `C:\Windows\System32` which is the usual system application path. Windows separates paths into system-protected paths and user-writable paths. An attacker needs a path with write and excuted permission with or without administration privilege in order to create or run malicious files or process.
+Checking the paths, both are in `C:\Windows\System32` which is the usual system application path. Windows separates paths into system-protected paths and user-writable paths. An attacker needs a path with write and executed permission with or without administration privilege in order to create or run malicious files or process.
 
 Paths with user-writable and execution without administration rights by default on Windows usually are
 
@@ -49,11 +49,11 @@ Paths with user-writable and execution without administration rights by default 
 `C:\AppData\`
 ```
 
-These paths are attackers' initial target paths to download malicious files or create a process to run malicious files, run ordinary Windows binaries called Living Off The Land (LOL) with malicious attempts, exfiltration, or attempt privilege escaltion. This is why an analyst should check the file path and use it as an indicator to do further investigation.
+These paths are attackers' initial target paths to download malicious files or create a process to run malicious files, run ordinary Windows binaries called Living Off The Land Binaries (LOLBins) with malicious attempts, exfiltration, or attempt privilege escalation. This is why an analyst should check the file path and use it as an indicator to do further investigation.
 
 ### Investigate The User
 
-The next indicator to distingush between a normal expect behaviour and a malicious one is to check the user that runs the process.
+The next indicator to distinguish between a normal expected behavior and a malicious one is to check the user that runs the process.
 
 Baseline SIDs and their meaning:
 
@@ -71,9 +71,9 @@ Patterns recognition of `S-1-5-*`
 
 This tells me that an SID with this pattern is `S-1-5-*` is a Windows built-in system/authority account.
 
-According to the evidence in the screenshot, the SID shown was `S-1-5-18`. It corresponds to the SYSTEM account. This means the user who executed this process is a system user which is the expecting behavior from the process created by `lsass.exe`.
+According to the evidence in the screenshot, the SID shown was `S-1-5-18`. It corresponds to the SYSTEM account. This means the process was executed under the SYSTEM account, which is expected behavior for a process like `lsass.exe`.
 
-Malicious user indicator is regular user account creating the original process that supposed to be done by a system account. Then, they escalate their privillege to a system or administrator account to run the process.
+Malicious user indicator is regular user account creating the original process that supposed to be done by a system account. Then, they escalate their privilege to a system or administrator account to run the process.
 
 ### Investigating Privilege Escalation Attempt
 
@@ -84,16 +84,26 @@ TokenElevationType = `%%1936` (default)
 Integrity level = System (expected for `lsass.exe`)
 ```
 
-Default token means no elevation of privilege appears. This showed the expected normal system behavior; therefore there is no privilege escalation attempt found.
+Default token indicates no privilege elevation occurred. This showed the expected normal system behavior; therefore there is no privilege escalation attempt found.
 
 ## Conclusion
 
-This is a normal system process. My machine is not currently under attack.
-
-After investigate  file paths and user, the file path `C:\Windows\System32` and the user which is the system according to System User ID appear to behave according to expected normal system behavior. There is no PE attempt according to this process inspection.
+The observed process behavior aligns with expected Windows system activity. No indicators of compromise or privilege escalation were identified during this analysis.
 
 ## Recommendation
 
-No danger yet. Keep monitoring for malicious software installation or excution.
+Continue monitoring process creation events for anomalies in parent-child relationships, file paths, and privilege usage.
 
 ## MITRE ATT&CK Reference
+
+### Tactic: Execution
+
++ T1059 – Command and Scripting Interpreter
++ T1204 – User Execution
++ T1106 – Native API
+
+### Additional Relevant Technique
+
++ T1036 – Masquerading
+
+Event ID 4688 provides visibility into process creation, which supports detection of these techniques by allowing analysts to monitor process execution, parent-child relationships, and abnormal process behavior.
