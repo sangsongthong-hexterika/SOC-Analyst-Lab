@@ -177,3 +177,12 @@ Here are some examples of suspicious or dangerous commands.
 It is to be noted that in a small company or on an individual machine, this process is done manually on each machine. However, in a larger company, this process can be done easily when creating a `Policy` that pushes the same command to be effective on 10,000+ computers at once.
 
 **Technical Observation:** While ProcessCreationIncludeCmdLine_Output was configured via the registry, the command line telemetry did not populate in this specific environment. This represents a Visibility Gap. In a production environment, this would be escalated to the Engineering team to ensure standardized Windows Enterprise/Pro builds are used to guarantee full forensic telemetry.
+
+---
+
+## CEU Submission Info
+
+**Author:** Sangsongthong Chantaranothai
+**Blog Title:** Investigating Process Creation Using Event ID 4688
+**Blog URL:** [GitHub: Investigating Process Creation Using Event ID 4688](https://github.com/sangsongthong-hexterika/SOC-Analyst-Lab/blob/main/windows-investigation/event-ID-4688/event-id-4688-README.md)
+**Date Published:** April 21, 2026
