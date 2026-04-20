@@ -162,3 +162,12 @@ Applications installed in the Program Files directory are more likely to be legi
 Technique: T1543.003 – Create or Modify
 System Process: Windows Service
 ```
+
+---
+
+CEU Submission Info
+
+**Author:** Sangsongthong Chantaranothai  
+**Blog Title:** Investigating Service Installation Using Windows Event ID 7045  
+**Blog URL:**
+**Date Published:**  
