@@ -182,7 +182,7 @@ It is to be noted that in a small company or on an individual machine, this proc
 
 ## CEU Submission Info
 
-**Author:** Sangsongthong Chantaranothai
-**Blog Title:** Investigating Process Creation Using Event ID 4688
-**Blog URL:** [GitHub: Investigating Process Creation Using Event ID 4688](https://github.com/sangsongthong-hexterika/SOC-Analyst-Lab/blob/main/windows-investigation/event-ID-4688/event-id-4688-README.md)
-**Date Published:** April 21, 2026
+**Author:** Sangsongthong Chantaranothai  
+**Blog Title:** Investigating Process Creation Using Event ID 4688  
+**Blog URL:** [GitHub: Investigating Process Creation Using Event ID 4688](https://github.com/sangsongthong-hexterika/SOC-Analyst-Lab/blob/main/windows-investigation/event-ID-4688/event-id-4688-README.md)  
+**Date Published:** April 21, 2026  
