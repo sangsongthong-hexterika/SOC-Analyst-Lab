@@ -169,5 +169,5 @@ CEU Submission Info
 
 **Author:** Sangsongthong Chantaranothai  
 **Blog Title:** Investigating Service Installation Using Windows Event ID 7045  
-**Blog URL:**
-**Date Published:**  
+**Blog URL:** [GitHub: Investigating Service Installation Using Windows Event ID 7045](https://github.com/sangsongthong-hexterika/SOC-Analyst-Lab/blob/main/windows-investigation/event-ID-7045/event-ID-7045-service-installation.md)  
+**Date Published:** April 2, 2026  

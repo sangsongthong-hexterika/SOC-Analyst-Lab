@@ -1,12 +1,103 @@
-# Investigating Windows Event ID 4720 A User Account Was Created
+# Investigating Windows Event ID 4720: A New User Account Was Created
 
 ## Context
 
+This lab investigates a new user account that was created on a Windows endpoint using Windows Event Viewer.
+
+Creating a new user account events are important from a security perspective because an attacker frequently create a suspicous or malicious user after gaining the administrative rights to maintain persistence on the compromised systems to ensure they can still login event if their initial exploit is patched.
+
+The focus of this investigation is Windows Event ID 4720, which records when a new user is created on a system.
+
+The objectives of this investigation are to:
+
++ identify a trace of a new user being created event in Windows logs
++ extract relevant information from the event record
++ determine whether the activity represents a legitimate behavior performed by the authorized people or by an attacker
+
+### Note
+
+This investigation was conducted on my personal laptop as a controlled lab exercise. No active attack was present. The purpose of the investigation is to understand the baseline of a normal system behavior before without attacking it so when I start my controlled attack lab later, this is the baseline.
+
 ## Proof Of Concept
+
+Step 1. Create a new account, James Collins. In this case, I use PowerShell instead of GUI for simplicity.
+
+![Create_a_new_account_powershell](./Images/event-id-4720-powershell-create-a-user.png)
+
+Fig 1. Creating a new user account. In this case, the sample name is `james_collins`.
+
+Step 2. Searching for event ID 4720 log using Event Viewer with a PowerShell as a bonus.
+
+![xml-system](./Images/event-id-4720-xml-system.png)
+
+Fig 2. XML-System
+
+![xml-EventData](./Images/event-id-4720-xml-eventData.png)
+
+Fig 3. XML-EventData
+
+![powershell_win-event_table](./Images/event-id-4720-powershell-4720-Get-WinEvent_2_table.png)
+
+Fig 4. powershell_win-event with table format
+
+![powershell_win-event_table_no_table](./Images/event-id-4720-powershell-4720-Get-WinEvent_2_no_table.png)
+
+Fig 4. powershell_win-event without table format since it is the only 4720 event, I can use this format as well.
+
+Step 3. Review event details
+
+### Event Detail Extracted
+
+| Field Name | Data |
+| --- | --- |
+| Event ID | `4720` |
+| Computer Name | My Username (redacted for privacy) |
+| Target User Name | `james_collins` (Sample Username - no need for redaction) |
+| Target SID | `S-1-5-21-...-1006` |
+| Subject SID | `S-1-5-21-...-1001` |
+| PrivilegeList | `-` |
+| SAM Account Name | `james_collins` |
+| TimeCreated SystemTime | `22 April 2026 at 9:51:12 PM` |
 
 ## Analysis
 
+Taking a look at the data from the Event Viewer XML, the criteria for analysis are:
+
+| Field Name | What it tells me? | Why it is an indicator? |
+| --- | --- | --- |
+| SubjectUserSid | The person who clicked **Create**. | If a regular employee's account suddenly creates a new user, that employee's account is compromised. |
+| TargetUserName | The name of the new user. | If it is something like `hacker101`, it will be easy to spot as a malicious account. However, an attacker can be stealthier by create a name that is like a normal person such as `james_collins`. As an analyst, we take in consideration to inspect this as well. If the company's naming convention is firstName_lastName, then, `james_collins` follows that pattern, but if it is firstName_firstInitialOfLastName, `james_c` is the correct structure and `james_collins` isn't. Moreover, an attacker can also create something like `local_admin` or `svc_backup` to try to mask their own present in the system. |
+| TargetSid | The unique ID of the new user. | Useful for tracking this user even if the attacker rename it later. |
+| SAMAccountName | The actual login name. | Attackers might make the **Display Name** looks real but the **SAM Name** weird. |
+| Privileges | What can this new user do? | Was it created as a standard user or added to the "Administrators" group immediately? |
+
+### Inspecting The New User's Creator
+
+According to the data extracted from this lab, the new user, `james_collins` was created by me, evidence by my own username that has been redacted. I am authorized to created a new account on my own computer. I created this account and I remembered it. There is no malicious intent here.
+
+### Inspect Time Created
+
+The user `james_collins` was created on `22 April 2026` at `9:51:12 PM`. The time created was outside of normal working hours.
+
+This combines with an account with administrative privilege or an employee that should not have the authority to create a new user account such as a receptionist account can be an evidence to a malicious action.
+
+However, in my case, I was the one with the authority to create a new user account and I did it on my own free will with sound mind and sound body. Even if it happens outside the working hours, it is not a malicious action.
+
+This means if the creator account belongs to someone with the authority to create a new user account create a new user account during the off-hours, the security analyst can just call in to verify if it is malicious or not because that person can work late. If that person has the authority to create a new user account, he can verify it. If he didn't perform the action, then it is clear that his account is compromised.
+
+### Inspect The Privilege Of The New User Account
+
+It has a standard user privilege because the    `PrivilegeList` field was `-`. There is nothing to worry about. If it is added into the admin group immediately after the creation, then, it can be a malicious intent evidence if there is no one name `james_collins` that supposes to have administrator privilege.
+
+If the security analyst is unsure because the company outsource them, you can contact the company's contact person to verify this information to rule out malicious vs non-malicious actions.
+
+### Inspect `SAMAccountName`
+
+There was nothing weird with the `SAMAccountName` either. It is the same as `TargetUserName`. This means there is no malicious intent here as well.
+
 ## Conclusion
+
+There is no evidence of malicious attempt in the creation of this new user account. However, some indicator raises questionable alert that while it is not outright malicious action, it can be ambigous which can lead to further inspection such as an admin account creating a new user account during a non-working hour. However, this questionable action can be rule out as malicious or non-malicious simply by contacting the point of contact person or that admin person directly to verify the action. This means beside technical inspection, communication is also play a major role of ruling out a malicious vs non-malicous action as well. A security analyst should take communication into their consideration and procedure as well before deciding if an action is malicious or non-malicious.
 
 ## Recommendation
 
@@ -17,6 +108,6 @@
 CEU Submission Info
 
 **Author:** Sangsongthong Chantaranothai  
-**Blog Title:** Investigating Windows Event ID 4720 A User Account Was Created
+**Blog Title:** Investigating Windows Event ID 4720: A New User Account Was Created
 **Blog URL:**
 **Date Published:**  
