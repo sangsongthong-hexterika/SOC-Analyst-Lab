@@ -71,11 +71,39 @@ Taking a look at the data from the Event Viewer XML, the criteria for analysis a
 | SAMAccountName | The actual login name. | Attackers might make the **Display Name** looks real but the **SAM Name** weird. |
 | Privileges | What can this new user do? | Was it created as a standard user or added to the "Administrators" group immediately? |
 
-### Inspecting The New User's Creator
+### Inspecting The `TargetUserName`
 
-According to the data extracted from this lab, the new user, `james_collins` was created by me, evidence by my own username that has been redacted. I am authorized to created a new account on my own computer. I created this account and I remembered it. There is no malicious intent here.
+Normally an analyst should compare it to the naming convention of the company's employee database naming convention and see if `james_collins` follows that structure or not.
 
-### Inspect Time Created
+Examples:
+
+| Naming Structure | Sample |
+| --- | --- |
+| firstName_lastName | `james_collins` |
+| firstName_lastNameInitial | `james_c` |
+| firstNameInitial_lastName | `j_collins` |
+
+Knowing this helps spotting a malicious attempt of a careless attacker if the name does not follow the company's guideline.
+
+However, in this case, I created `james_collins` on my local computer for the lab purpose. I have full authority to do that so this is not a malicious attempt.
+
+### Inspecting The `TargetUserSid`
+
+The `TargetUserSid` for `james_collins` ends in RID `1006`.
+
+Inspecting this field is useful because if the attacker set the `TargetUserName` to be something like `svc_backup` instead of `james_collins` but it has the `TargetUserSid` of `1006`, then, it shows a malicious attempt because this `1006` `TargetUserSid` in indicates it is a newly created custom account in the local security database which is differed from pre-existing system accounts.
+
+### Inspecting The New User's Creator: `SubjectUserName`
+
+According to the data extracted from this lab, the new user, `james_collins` was created by me, evidence by my own username that has been redacted, the `SubjectUserName`. I am authorized to created a new account on my own computer. I created this account and I remembered it. There is no malicious intent here.
+
+### Inspecting The New User's Creator: `SubjectUserSid`
+
+Inspecting my own account's `SubjectUserSid`. It shows it ends in RID `1001`. This identifier confirms that the account used to create the new user is the primary administrative account established during the system's initial setup. The use of a high-privilege RID (1000+) instead of a built-in system RID (e.g., 500) confirms this was a manual action performed by the local administrator which is me.
+
+If this account was used in an irregular hour, a security analyst should contact the point of contact person or the local administrator who owns that account to validate if the action was malicious or not. If the local administrator was the one who perform the task at that time, it was non-malicious. Otherwise, we will have the evidence that the account is compromised.
+
+### Inspecting Time Created
 
 The user `james_collins` was created on `22 April 2026` at `9:51:12 PM`. The time created was outside of normal working hours.
 
@@ -85,13 +113,13 @@ However, in my case, I was the one with the authority to create a new user accou
 
 This means if the creator account belongs to someone with the authority to create a new user account create a new user account during the off-hours, the security analyst can just call in to verify if it is malicious or not because that person can work late. If that person has the authority to create a new user account, he can verify it. If he didn't perform the action, then it is clear that his account is compromised.
 
-### Inspect The Privilege Of The New User Account
+### Inspecting The Privilege Of The New User Account
 
-It has a standard user privilege because the    `PrivilegeList` field was `-`. There is nothing to worry about. If it is added into the admin group immediately after the creation, then, it can be a malicious intent evidence if there is no one name `james_collins` that supposes to have administrator privilege.
+It has a standard user privilege because the `PrivilegeList` field was `-`. There is nothing to worry about. If it is added into the admin group immediately after the creation, then, it can be a malicious intent evidence if there is no one name `james_collins` that supposes to have administrator privilege.
 
 If the security analyst is unsure because the company outsource them, you can contact the company's contact person to verify this information to rule out malicious vs non-malicious actions.
 
-### Inspect `SAMAccountName`
+### Inspecting `SAMAccountName`
 
 There was nothing weird with the `SAMAccountName` either. It is the same as `TargetUserName`. This means there is no malicious intent here as well.
 
