@@ -97,17 +97,34 @@ There was nothing weird with the `SAMAccountName` either. It is the same as `Tar
 
 ## Conclusion
 
-There is no evidence of malicious attempt in the creation of this new user account. However, some indicator raises questionable alert that while it is not outright malicious action, it can be ambigous which can lead to further inspection such as an admin account creating a new user account during a non-working hour. However, this questionable action can be rule out as malicious or non-malicious simply by contacting the point of contact person or that admin person directly to verify the action. This means beside technical inspection, communication is also play a major role of ruling out a malicious vs non-malicous action as well. A security analyst should take communication into their consideration and procedure as well before deciding if an action is malicious or non-malicious.
+There is no evidence of malicious attempt in the creation of this new user account. However, some indicator raises questionable alert that while it is not outright malicious action, it can be ambigous which can lead to further inspection such as an admin account creating a new user account during a non-working hour. However, this questionable action can be rule out as malicious or non-malicious simply by contacting the point of contact person or that admin person directly to verify the action. This means beside technical inspection, communication also plays a major role of ruling out a malicious vs non-malicous action as well. A security analyst should take communication into their consideration and procedure as well before deciding if an action is malicious or non-malicious.
 
 ## Recommendation
 
+To improve the detection and response for unauthorized account creation, the following measures are recommended:
+
++ **Enable Alerting for Event ID 4720:** Configure the SIEM or EDR to trigger a high-priority alert whenever a 4720 event occurs, especially if the SubjectUserSid does not match known IT/HR administrative accounts.
+
++ **Correlate with Group Membership Logs:** Ensure that Event ID 4732 is also being monitored. If a new user is created (4720) and immediately added to the "Administrators" or "Remote Desktop Users" group, it should be treated as a critical incident.
+
++ **Establish a Change Management Baseline:** Maintain a record of scheduled new hires or contractor start dates. Any 4720 event that does not align with a pre-approved change request should be automatically flagged for verification.
+
++ **Implement Least Privilege:** Ensure that standard user accounts do not have the permissions to create other accounts. Only designated "Account Operators" or "Domain Admins" should have this capability to reduce the "Subject SID" attack surface.
+
 ## MITRE ATT&CK Reference
+
+The activity investigated in this lab maps to the following framework details:
+
+| Tactic | Tecnique | ID | Detail |
+| --- | --- | --- | --- |
+| Persistence | Create Account | [T1136](https://attack.mitre.org/techniques/T1136/) | Attackers create new accounts to maintain access to a victim system even after their initial entry point is closed. |
+| Persistence | Local Account | [T1136.001](https://attack.mitre.org/techniques/T1136/001/) | Specifically creating a local account (like james_collins) rather than a domain-wide account to stay under the radar of domain controllers. |
 
 ---
 
-CEU Submission Info
+## CEU Submission Info
 
 **Author:** Sangsongthong Chantaranothai  
 **Blog Title:** Investigating Windows Event ID 4720: A New User Account Was Created
-**Blog URL:**
-**Date Published:**  
+**Blog URL:** [GitHub: Investigating Windows Event ID 4720: A New User Account Was Created](https://github.com/sangsongthong-hexterika/SOC-Analyst-Lab/blob/main/windows-investigation/event-ID-4720/event-id-4720-README.md)  
+**Date Published:** April 23, 2023  
