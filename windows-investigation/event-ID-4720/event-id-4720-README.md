@@ -125,6 +125,6 @@ The activity investigated in this lab maps to the following framework details:
 ## CEU Submission Info
 
 **Author:** Sangsongthong Chantaranothai  
-**Blog Title:** Investigating Windows Event ID 4720: A New User Account Was Created
+**Blog Title:** Investigating Windows Event ID 4720: A New User Account Was Created  
 **Blog URL:** [GitHub: Investigating Windows Event ID 4720: A New User Account Was Created](https://github.com/sangsongthong-hexterika/SOC-Analyst-Lab/blob/main/windows-investigation/event-ID-4720/event-id-4720-README.md)  
 **Date Published:** April 23, 2023  
