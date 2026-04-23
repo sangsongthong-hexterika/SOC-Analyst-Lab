@@ -20,13 +20,13 @@ This investigation was conducted on my personal laptop as a controlled lab exerc
 
 ## Proof Of Concept
 
-Step 1. Create a new account, James Collins. In this case, I use PowerShell instead of GUI for simplicity.
+**Step 1.** Create a new account, James Collins. In this case, I use PowerShell instead of GUI for simplicity.
 
 ![Create_a_new_account_powershell](./Images/event-id-4720-powershell-create-a-user.png)
 
 Fig 1. Creating a new user account. In this case, the sample name is `james_collins`.
 
-Step 2. Searching for event ID 4720 log using Event Viewer with a PowerShell as a bonus.
+**Step 2.** Searching for event ID 4720 log using Event Viewer with a PowerShell as a bonus.
 
 ![xml-system](./Images/event-id-4720-xml-system.png)
 
@@ -44,17 +44,17 @@ Fig 4. powershell_win-event with table format
 
 Fig 4. powershell_win-event without table format since it is the only 4720 event, I can use this format as well.
 
-Step 3. Review event details
+**Step 3.** Review event details
 
 ### Event Detail Extracted
 
 | Field Name | Data |
 | --- | --- |
-| Event ID | `4720` |
-| Computer Name | My Username (redacted for privacy) |
-| Target User Name | `james_collins` (Sample Username - no need for redaction) |
-| Target SID | `S-1-5-21-...-1006` |
-| Subject SID | `S-1-5-21-...-1001` |
+| EventID | `4720` |
+| ComputerName | My Username (redacted for privacy) |
+| TargetUserName | `james_collins` (Sample Username - no need for redaction) |
+| TargetSid | `S-1-5-21-...-1006` |
+| SubjectSid | `S-1-5-21-...-1001` |
 | PrivilegeList | `-` |
 | SAM Account Name | `james_collins` |
 | TimeCreated SystemTime | `22 April 2026 at 9:51:12 PM` |
