@@ -4,7 +4,7 @@
 
 This lab investigates a login success or failure on a Windows endpoint using Windows Event Viewer.
 
-Logon success or failure are important from a security perspective because a multiple logon failure such as 500 and follow by 1 success means there is brute force or dictionary attack attempts by an attacker. If the failure rate is very little such as a few attempts, it might indicate a normal user typo or forget their credentials. In addition, the time and the frequency of the event matter as well.
+Logon success or failure are important from a security perspective because a multiple logon failure such as 500 times and follow by 1 success means there is brute force or dictionary attack attempts by an attacker. If the failure rate is very little such as a few attempts, it might indicate a normal user typo or forget their credentials. In addition, the time and the frequency of the event matter as well.
 
 The focus of this investigation are Windows Event ID 4624 which is logon success and 4625 which is logon failure.
 
@@ -15,6 +15,58 @@ The objectives of this investigation are to:
 + determine whether the activity represents a legitimate behavior performed by the authorized people or by an attacker.
 
 ## Proof Of Concept
+
+Step 1. Log out from my computer.
+Step 2. Log back in but intentionally typing the wrong password. This will trigger 1 logon failure event ID 4625.
+
+![event-id-4625-generic.png](./Images/event-id-4625-generic.png)
+
+Fig 1. Event ID 4625 General Tab
+
+![event-id-4625-xml-system.png](./Images/event-id-4625-xml-system.png)
+
+Fig 2. Event ID 4625 XML View System
+
+![event-id-4625-xml-event-data-1.png](./Images/event-id-4625-xml-event-data-1.png)
+
+Fig 3. Event ID 4625 XML View EventData 1
+
+![event-id-4625-xml-event-data-2.png](./Images/event-id-4625-xml-event-data-2.png)
+
+Fig 4. Event ID 4625 XML View EventData 2
+
+Step 3. Log back in but type the correct password. This will trigger 1 logon success event ID 4624.
+
+![event-id-4624-generic.png](./Images/event-id-4624-generic.png)
+
+Fig 5. Event ID 4624 General Tab
+
+![event-id-4624-xml-system.png](./Images/event-id-4624-xml-system.png)
+
+Fig 6. Event ID 4625 XML View System
+
+![event-id-4624-xml-event-data-1.png)](./Images/event-id-4624-xml-event-data-1.png)
+
+Fig 7. Event ID 4625 XML View EventData 1
+
+![event-id-4625-xml-event-data-2.png](./Images/event-id-4625-xml-event-data-2.png)
+
+Fig 8. Event ID 4625 XML View EventData 2
+
+Step 4. Review the data.
+
+### Event ID 4625 Logon Failure
+
+| Field Name | Data |
+| --- | --- |
+| Time | |
+| SubjectUserID | |
+
+### Event ID 4624 Logon Success
+
+| Field Name | Data |
+| --- | --- |
+| Time | |
 
 ## Analysis
 
