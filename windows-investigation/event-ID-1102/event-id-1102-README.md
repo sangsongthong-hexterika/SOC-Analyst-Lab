@@ -116,7 +116,7 @@ This log wiped is performed by me, the authorized admin of my computer for this 
 
 ---
 
-CEU Submission Info
+## CEU Submission Info
 
 **Author:** Sangsongthong Chantaranothai  
 **Blog Title:** Investigating Windows Event ID 1102 Security Log Was Cleared
