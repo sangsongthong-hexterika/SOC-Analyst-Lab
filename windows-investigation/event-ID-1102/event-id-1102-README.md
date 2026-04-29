@@ -66,10 +66,6 @@ Taking a look at the data from the Event Viewer XML, the criteria for analysis a
 
 | Field Name | What it tells me? | Why it is an indicator? |
 | --- | --- | --- |
-| Event ID 1102 | It tells me that a specific action: "The audit log was cleared.", is being performed on my computer. | This matters because if an authorized system admin does this when they need to clear the logs on the computer to regain spaces. However, if the one who perform it is not the authorized person, it shows that something happens before this event and someone is trying to hide it from the security analyst and the authorized personal. Think of it as trying to hide a crime at a crime scene. You might see a trace that something happened but you don't know what happened unless you corelated this event with another event logs such as SIEM prior to the security record wiped event. |
-| Account Name | The user who cleared the log. | This show who cleared the security logs. An authorized admin or a system account or an unauthorized user. This can be an indicator of which user is compromised. |
-| Logon ID | It is a session identifier. | This is the information that an analyst can use to coreleate this event to others in other logs if still available such as in SIEM. |
-| Source | It confirms that the source came from the legit source, Microsoft-Windows-Eventlog. | If the source is not from Microsoft-Windows-Eventlog, the attacker might try to tamper with the log file or import it from another log in an attempt to hide what they have done. |
 
 ### Inspecting The Event ID
 
