@@ -1,4 +1,4 @@
-# Investigating Windows Event ID 4625 Failed Logon Attempt
+# Investigating Windows Event ID 4624/4625 Success/Failed Logon Attempt
 
 ## Context
 
@@ -17,6 +17,6 @@
 CEU Submission Info
 
 **Author:** Sangsongthong Chantaranothai  
-**Blog Title:** Investigating Windows Event ID 4625 Failed Logon Attempt
+**Blog Title:** Investigating Windows Event ID 4624/4625 Success/Failed Logon Attempt
 **Blog URL:**
 **Date Published:**  
