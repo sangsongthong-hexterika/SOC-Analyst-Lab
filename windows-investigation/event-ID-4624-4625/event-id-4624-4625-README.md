@@ -16,8 +16,8 @@ The objectives of this investigation are to:
 
 ## Proof Of Concept
 
-Step 1. Log out from my computer.
-Step 2. Log back in but intentionally typing the wrong password. This will trigger 1 logon failure event ID 4625.
+**Step 1.** Log out from my computer.
+**Step 2.** Log back in but intentionally typing the wrong password. This will trigger 1 logon failure event ID 4625.
 
 ![event-id-4625-generic.png](./Images/event-id-4625-generic.png)
 
@@ -35,7 +35,7 @@ Fig 3. Event ID 4625 XML View EventData 1
 
 Fig 4. Event ID 4625 XML View EventData 2
 
-Step 3. Log back in but type the correct password. This will trigger 1 logon success event ID 4624.
+**Step 3.** Log back in but type the correct password. This will trigger 1 logon success event ID 4624.
 
 ![event-id-4624-generic.png](./Images/event-id-4624-generic.png)
 
@@ -53,19 +53,28 @@ Fig 7. Event ID 4625 XML View EventData 1
 
 Fig 8. Event ID 4625 XML View EventData 2
 
-Step 4. Review the data.
+**Step 4.** Review and extract the data details.
 
-### Event ID 4625 Logon Failure
+### Event ID 4625 Logon Failure Detail Extracted
 
 | Field Name | Data |
 | --- | --- |
+| Event ID | 4625 |
+| SubjectUserSid | |
+| SubjectUserName | Redacted My Real Username |
+| SubjectDomainName | Redacted My Real Domain Name |
+| SubjectLogonID | |
 | Time | |
-| SubjectUserID | |
 
-### Event ID 4624 Logon Success
+### Event ID 4624 Logon Success Detail Extracted
 
 | Field Name | Data |
 | --- | --- |
+| Event ID | 4624 |
+| SubjectUserSid | |
+| SubjectUserName | Redacted My Real Username |
+| SubjectDomainName | Redacted My Real Domain Name |
+| SubjectLogonID | |
 | Time | |
 
 ## Analysis
