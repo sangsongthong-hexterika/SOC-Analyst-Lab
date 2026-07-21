@@ -43,15 +43,15 @@ Fig 5. Event ID 4624 General Tab
 
 ![event-id-4624-xml-system.png](./Images/event-id-4624-xml-system.png)
 
-Fig 6. Event ID 4625 XML View System
+Fig 6. Event ID 4624 XML View System
 
 ![event-id-4624-xml-event-data-1.png)](./Images/event-id-4624-xml-event-data-1.png)
 
-Fig 7. Event ID 4625 XML View EventData 1
+Fig 7. Event ID 4624 XML View EventData 1
 
-![event-id-4625-xml-event-data-2.png](./Images/event-id-4625-xml-event-data-2.png)
+![event-id-4624-xml-event-data-2.png](./Images/event-id-4624-xml-event-data-2.png)
 
-Fig 8. Event ID 4625 XML View EventData 2
+Fig 8. Event ID 4624 XML View EventData 2
 
 **Step 4.** Review and extract the data details.
 
@@ -60,11 +60,15 @@ Fig 8. Event ID 4625 XML View EventData 2
 | Field Name | Data |
 | --- | --- |
 | Event ID | 4625 |
-| SubjectUserSid | |
+| SubjectUserSid | `s-1-5-18` |
 | SubjectUserName | Redacted My Real Username |
 | SubjectDomainName | Redacted My Real Domain Name |
 | SubjectLogonID | |
 | Time | |
+| TargetUserSid | |
+| TargetUserName | |
+| TargetDomainName | |
+| TargetLogonId | |
 
 ### Event ID 4624 Logon Success Detail Extracted
 
@@ -88,6 +92,16 @@ Fig 8. Event ID 4625 XML View EventData 2
 + Setup MFA. Even if the attacker can login, MFA will be another obsticle for them. Don't make it easy for them.
 
 ## MITRE ATT&CK Reference
+
+| Technique ID | Name | Tactic | Relevance |
+| --- | --- | --- | --- |
+| T1110 | Brute Force | Credential Access | Repeated Event ID 4625 in high volume is the primary indicator |
+| T1110.001 | Password Guessing | Credential Access | Many 4625 events against one account, SubStatus 0xC000006A |
+| T1110.003 | Password Spraying | Credential Access | Few 4625 events each across many accounts — low failure count per account does not always mean benign |
+| T1110.004 | Credential Stuffing | Credential Access | Breached credential reuse; often one or two attempts per account from external IPs |
+| T1078 | Valid Accounts | Initial Access, Persistence | Event ID 4624 following a failure burst indicates the attacker now holds working credentials |
+
+Relevant mitigations: M1032 (Multi-factor Authentication), M1036 (Account Use Policies / lockout), M1027 (Password Policies) — these map directly to the Recommendation section above.
 
 ---
 
