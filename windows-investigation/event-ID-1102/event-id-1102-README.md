@@ -70,17 +70,6 @@ Fig 4. Event Viewer Details Tab XML View UserData
 
 **Step 4.** Review event ID 1102 and extract the data details.
 
-### Event ID 1102 Detail Extracted
-
-| Field Name | Data |
-| --- | --- |
-| Event ID | 1102 |
-| SubjectUserSid | |
-| SubjectUserName | Redacted My Real Username |
-| SubjectDomainName | Redacted My Real Domain Name |
-| SubjectLogonID | |
-| Time | |
-
 **Step 5.** Since there was 2 events, check the correlated event 4688 as well.
 
 ![event-id-1102-correlate-4688-generic.png](./Images/event-id-1102-correlate-4688-generic.png)
@@ -96,6 +85,19 @@ Fig 6. Correlated Event ID 4688 XML System
 Fig 7. Correlated Event ID 4688 XML EventData
 
 **Step 7.** Extracted the data from the correlated event ID 4688
+
+## Extracted Details
+
+### Event ID 1102 Detail Extracted
+
+| Field Name | Data |
+| --- | --- |
+| Event ID | 1102 |
+| SubjectUserSid | |
+| SubjectUserName | Redacted My Real Username |
+| SubjectDomainName | Redacted My Real Domain Name |
+| SubjectLogonID | |
+| Time | |
 
 ### Event ID 4688 Detail Extracted
 
@@ -134,10 +136,3 @@ This log wiped is performed by me, the authorized admin of my computer for this 
 ## MITRE ATT&CK Reference
 
 ---
-
-## CEU Submission Info
-
-**Author:** Sangsongthong Chantaranothai  
-**Blog Title:** Investigating Windows Event ID 1102 Security Log Was Cleared
-**Blog URL:**
-**Date Published:**  
