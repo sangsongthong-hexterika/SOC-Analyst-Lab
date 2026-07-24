@@ -58,15 +58,15 @@ Fig 1. A PowerShell command clearing the log.
 
 ![event-id-1102-generic.png](./Images/event-id-1102-generic.png)
 
-Fig 2. Event Viewer General Tab
+Fig 2. Event ID 1102 -- General Tab
 
 ![event-id-1102-xml-system-v2.png](./Images/event-id-1102-xml-system-v2.png)
 
-Fig 3. Event Viewer Details Tab XML View System
+Fig 3. Event ID 1102 XML View -- System
 
 ![event-id-1102-xml-event-data-v2.png](./Images/event-id-1102-xml-event-data-v2.png)
 
-Fig 4. Event Viewer Details Tab XML View UserData
+Fig 4. Event ID 1102 XML View -- EventData
 
 **Step 4.** Review event ID 1102 and extract the data details.
 
@@ -74,15 +74,15 @@ Fig 4. Event Viewer Details Tab XML View UserData
 
 ![event-id-1102-correlate-4688-generic.png](./Images/event-id-1102-correlate-4688-generic.png)
 
-Fig 5. Correlated Event ID 4688 General Tab
+Fig 5. Event ID 4688 -- General Tab
 
 ![event-id-1102-correlate-4688-xml-system.png](./Images/event-id-1102-correlate-4688-xml-system.png)
 
-Fig 6. Correlated Event ID 4688 XML System
+Fig 6. Event ID 4688 XML View -- System
 
 ![event-id-1102-correlate-4688-xml-event-data.png](./Images/event-id-1102-correlate-4688-xml-event-data.png)
 
-Fig 7. Correlated Event ID 4688 XML EventData
+Fig 7. Event ID 4688 XML View -- EventData
 
 **Step 7.** Extracted the data from the correlated event ID 4688
 
