@@ -1,18 +1,18 @@
-# Investigating Windows Event ID 4624/4625 Success/Failed Logon Attempt
+# Investigating Windows Event IDs 4624/4625: Successful and Failed Logon Attempts
 
 ## Context
 
-This lab investigates logon success and failure events on a Windows endpoint using Windows Event Viewer.
+This lab investigates successful and failed logon events on a Windows endpoint using Windows Event Viewer.
 
-Logon success and failure events are important from a security perspective because multiple logon failures, such as 500 failures followed by one success, may indicate brute-force or password-guessing attempts by an attacker. A small number of failures might indicate that a normal user mistyped or forgot their credentials. However, these are only possible interpretations. A small number of failures does not guarantee that the activity was caused by a normal user. The timing and frequency of the events also matter.
+Logon success and failure events are important from a security perspective because multiple failed logons, such as 500 failures followed by one success, may indicate brute-force or password-guessing attempts by an attacker. A small number of failures might indicate that a normal user mistyped or forgot their credentials. However, these are only possible interpretations. A small number of failures does not guarantee that the activity was caused by a normal user. The timing and frequency of the events also matter.
 
 The focus of this investigation is Windows Event ID 4624, which records a successful logon, and Event ID 4625, which records a failed logon.
 
 The objectives of this investigation are to:
 
-+ identify a trace of login failure.
-+ extract relevant information from the event record.
-+ determines whether the captured 4625 and 4624 represent the same logon activity.
++ identify a trace of a failed logon.
++ extract relevant information from the event records.
++ determine whether the captured Event IDs 4625 and 4624 represent the same logon activity.
 
 ## Proof Of Concept
 
@@ -25,15 +25,15 @@ Fig 1. Event ID 4625 General Tab
 
 ![event-id-4625-xml-system.png](./Images/event-id-4625-xml-system.png)
 
-Fig 2. Event ID 4625 XML View System
+Fig 2. Event ID 4625 XML View -- System
 
 ![event-id-4625-xml-event-data-1.png](./Images/event-id-4625-xml-event-data-1.png)
 
-Fig 3. Event ID 4625 XML View EventData 1
+Fig 3. Event ID 4625 XML View -- EventData 1
 
 ![event-id-4625-xml-event-data-2.png](./Images/event-id-4625-xml-event-data-2.png)
 
-Fig 4. Event ID 4625 XML View EventData 2
+Fig 4. Event ID 4625 XML View -- EventData 2
 
 **Step 3.** Log back in using the correct password. This should trigger a successful-logon event, Event ID 4624.
 
@@ -45,17 +45,17 @@ Fig 5. Event ID 4624 General Tab
 
 ![event-id-4624-xml-system.png](./Images/event-id-4624-xml-system.png)
 
-Fig 6. Event ID 4624 XML View System
+Fig 6. Event ID 4624 XML View -- System
 
 ![event-id-4624-xml-event-data-1.png](./Images/event-id-4624-xml-event-data-1.png)
 
-Fig 7. Event ID 4624 XML View EventData 1
+Fig 7. Event ID 4624 XML View -- EventData 1
 
 ![event-id-4624-xml-event-data-2.png](./Images/event-id-4624-xml-event-data-2.png)
 
-Fig 8. Event ID 4624 XML View EventData 2
+Fig 8. Event ID 4624 XML View -- EventData 2
 
-**Step 4.** Review and extract the data details.
+**Step 4.** Review and extract the relevant details from both event records.
 
 ### Event ID 4625 Logon Failure Detail Extracted
 
@@ -66,7 +66,7 @@ Fig 8. Event ID 4624 XML View EventData 2
 | EventID | The Windows event identifier. | `4625` |
 | TimeCreated SystemTime | When the event was recorded. | `2026-04-29T08:53:38.2376170Z` — 29 April 2026, 3:53:38 PM local time |
 
-#### Event ID 4625 EventData section
+#### Event ID 4625 EventData Section
 
 | Field Name | What it records | Data |
 | --- | --- | --- |
@@ -81,7 +81,7 @@ Fig 8. Event ID 4624 XML View EventData 2
 
 ### Event ID 4624 Logon Success Detail Extracted
 
-#### Event ID 4624 System section
+#### Event ID 4624 System Section
 
 | Field Name | What it records | Data |
 | --- | --- | --- |
@@ -103,33 +103,76 @@ Fig 8. Event ID 4624 XML View EventData 2
 
 ### Examine Event IDs
 
-In this lab, the goal is to check the logon attempts to see if the logon failure and success correlated or not.
-The event ID 4625 is logon attempt failed and the event ID 4624 is logon attempt successful.
+The goal of this lab is to compare the failed and successful logon events and determine whether they represent the same logon activity.
+
+Event ID 4625 records a failed logon attempt, while Event ID 4624 records a successful logon.
 
 ### Examine The Timestamps
 
-To check the timestamps, take a look at the system time of both events. Event ID 4625 logon attempt failure happened at `29 April 2026, 3:53:38 PM local time` while the event ID 4624 logon attempt success happened at `29 April 2026, 3:55:30 PM local time`. Both of them happened on the same day with the event ID 4624 happened after event ID 4625 with time different of 1 minute and 52 seconds apart. The times occured very close together making this check worth investigating. However, timestamps alone is not enough to conclude that this successful logon is the result of correct logon from event ID 4625 because event 4624 records all kind of logon success attempts, not just from logging back on from the local user account logon. It captures a successful logon of a service account as well therefore it is crucial to analyse other fields before concluding.
+To compare the timestamps, I examined the system time recorded in both events.
+
+The Event ID 4625 failed-logon attempt occurred on 29 April 2026 at 3:53:38 PM local time, while the Event ID 4624 successful logon occurred on 29 April 2026 at 3:55:30 PM local time.
+
+Both events occurred on the same day, with Event ID 4624 appearing 1 minute and 52 seconds after Event ID 4625. The events occurred close enough together to make the comparison worth investigating.
+
+However, timestamps alone are not enough to conclude that the successful logon was the result of entering the correct password after Event ID 4625. Event ID 4624 records different types of successful logons, not only local users signing into Windows. It can also record successful service logons. Therefore, it is important to examine the other fields before reaching a conclusion.
 
 ### Identify Accounts Involved
 
-The related fields are `TargetUserName` and `TargetDomainName`. On Event ID 4625, the `TargetUsername` and `TargetDomainName` were my local username and my local device's name, which I redacted, which is different from the `TargetUsername` of event ID 4624 which were `SYSTEM` and `NT AUTHORITY`. If both event IDs point to the same account, it supported that these two events are correlated but it cannot conclude that without looking further. However, in this lab, the accounts involved are different. The accounts associated with event ID 4625 pointed to my account's username and which were unique and were redacted but the accounts associated with event ID 4624 is Microsoft's built-in system account (`SYSTEM` and `NT AUTHORITY` are not two separate accounts:
+The relevant fields are `TargetUserName` and `TargetDomainName`.
 
-+ SYSTEM = target account name;
-+ NT AUTHORITY = the authority/domain context for that account.
+For Event ID 4625, `TargetUserName` and `TargetDomainName` contained my local username and local device name. Both values were redacted.
 
-Together they identify one Windows security principal.) which appear in all Windows so I did not need to redact. This point alone showed that both events were pointed to different accounts. Different target accounts show that they cannot be the failed and successful records of the same account logon attempt.
+Event ID 4624 recorded `SYSTEM` as the `TargetUserName` and `NT AUTHORITY` as the `TargetDomainName`.
+
+`SYSTEM` and `NT AUTHORITY` are not two separate accounts:
+
+`SYSTEM` is the target account name.
+`NT AUTHORITY` is the authority or domain context of the account.
+
+Together, they identify one Windows security principal.
+
+If both events pointed to the same account, this would support a possible relationship between them, although it would not be enough to reach a conclusion without examining the other fields.
+
+In this lab, the accounts were different. Event ID 4625 pointed to my local user account, while Event ID 4624 pointed to the built-in `NT AUTHORITY\SYSTEM` account. These values did not need to be redacted because they are standard Windows account values.
+
+The different target accounts show that these events cannot be the failed and successful records of the same account logon attempt.
 
 ### Interpret The LogonType
 
-Event ID 4625's `LogonType` was `2` but event ID 4624's `LogonType` was `5`. Logon Type 2 means Interactive: a user attempted to log on directly to the computer which matched what I have been testing. Logon Type 5 means Service: the Service Control Manager started a service. This is not the same category of logon as Type 2. This is one of the strongest pieces of evidence that the records represent different activities.
+Event ID 4625 recorded a `LogonType` of `2`, while Event ID 4624 recorded a `LogonType` of `5`.
+
+`Logon Type 2` means Interactive. A user attempted to log on directly to the computer, which matches the activity performed during this lab.
+
+`Logon Type 5` means Service. The Service Control Manager started a service.
+
+These are not the same category of logon. This is one of the strongest pieces of evidence that the records represent different activities.
 
 ### Examine LogonProcessName
 
-Event ID 4625's `LogonProcessName` is `User32`. This is consistent with Windows handling an interactive user logon attempt. Event ID 4624's `LogonProcessName` is `Advapi`. This indicates a different Windows logon mechanism was used. Different values are a signal to investigate further. Matching values would make the events look more consistent, but would not prove they belong together. Here, `User32` versus `Advapi` supports the stronger differences already found in the target accounts and logon types.
+Event ID 4625 recorded `User32` as the `LogonProcessName`. This is consistent with Windows handling an interactive user logon attempt.
+
+Event ID 4624 recorded `Advapi` as the `LogonProcessName`. This indicates that a different Windows logon mechanism was used.
+
+Different values are a signal to investigate further. Matching values would make the events appear more consistent, but they would not prove that the events belong together.
+
+In this case, `User32` versus `Advapi` supports the stronger differences already found in the target accounts and logon types.
 
 ### Examine ProcessName
 
-The caller process associated with the failed logon request of event ID 4625 was recorded in the `ProcessName` which was `C:\Windows\System32\svchost.exe`. This connected with the failed authentication request. The caller process that attempted or requested the logon of event ID 4624 was recorded in the `ProcessName` which was `C:\Windows\System32\services.exe`. This refers to Windows Service Control Manager activity. So far, the 4624 combination is internally consistent:
+The caller process associated with the failed logon request in Event ID 4625 was recorded in `ProcessName` as:
+
+`C:\Windows\System32\svchost.exe`
+
+This process was connected with the failed authentication request.
+
+The caller process that requested the logon in Event ID 4624 was recorded as:
+
+`C:\Windows\System32\services.exe`
+
+This refers to Windows Service Control Manager activity.
+
+The Event ID 4624 fields are internally consistent:
 
 + `SYSTEM`
 + `NT AUTHORITY`
@@ -137,40 +180,56 @@ The caller process associated with the failed logon request of event ID 4625 was
 + `Advapi`
 + `services.exe`
 
-Together, those fields identified that event ID 4624 was a successful service logon.
+Together, these fields identify Event ID 4624 as a successful service logon.
+
+A successful service logon is different from a successful interactive logon performed directly by a user. However, Windows records both types of successful logons under Event ID 4624. Therefore, a nearby Event ID 4624 should not automatically be treated as the successful result of a preceding Event ID 4625.
+
+The account, logon type, logon process, and caller process must be examined to determine whether Event ID 4624 records the expected user activity or an unrelated service logon.
 
 ### Examine The Source Address
 
-Event ID 4625 recorded the source IP address as `127.0.0.1` which is the localhost which refers to this computer, not cloud or other computer. Event ID 4624 didn't record the source IP address. The `-` means the field was not populated for that event, not necessarily that networking did not exist.
+Event ID 4625 recorded the source IP address as `127.0.0.1`. This is the `localhost` address, meaning the activity came from the same computer rather than another computer or a remote system.
 
-### Read the 4625 failure Codes
+Event ID 4624 did not record a source IP address. The value `-` means that the field was not populated for this event. It does not necessarily mean that no networking was involved.
 
-On event ID 4625, the`Status` record was `0xC000006D` and `SubStatus` record was `0xC000006A`.
+### Read the Event ID 4625 Failure Codes
+
+Event ID 4625 recorded the following values:
+
+`Status`: `0xC000006D`
+`SubStatus`: `0xC000006A`
 
 Their meanings are:
 
 `0xC000006D`: The logon failed because of a bad username or authentication information.
 `0xC000006A`: The password was incorrect.
 
-These fields are not present in 4624 because 4624 records a successful logon, so it has no failure status to explain.
+These fields are not present in Event ID 4624 because Event ID 4624 records a successful logon and therefore has no failure status to explain.
 
 ## Conclusion
 
-The reason I chain them together is because the events happened close together so I compared them. However the results showed that
+I initially compared these events because they occurred close together. However, the results showed that:
 
-+ the target accounts differ
-+ the logon types differs
-+ the logon processes differ
++ the target accounts were different.
++ the logon types were different.
++ the logon processes were different.
++ the caller processes were different.
 
-Therefore there are two conclusion from the comparison of these two. The first one is time alone is insufficient to treat the 4624 as the corresponding successful version of the 4625. The second one is these two events are not the failed and successful records of the same logon attempt.
+Two conclusions can be drawn from this comparison.
+
+First, time alone is not enough to treat Event ID 4624 as the corresponding successful version of Event ID 4625.
+
+Second, the captured Event IDs 4625 and 4624 are not the failed and successful records of the same logon attempt.
 
 ## Recommendation
 
-+ Configure an appropriate account-lockout threshold and lockout duration for the environment. The policy should allow reasonable user mistakes while limiting repeated password-guessing attempts. Avoid setting the threshold too low because attackers could deliberately lock legitimate users out of their accounts.
++ Configure an appropriate account-lockout threshold and lockout duration for the environment. The policy should allow for reasonable user mistakes while limiting repeated password-guessing attempts. Avoid setting the threshold too low because attackers could deliberately lock legitimate users out of their accounts.
 + Use strong, unique passwords and avoid reusing the same password across different accounts. A password manager can help users create and store unique passwords.
 + Enable multi-factor authentication where available. Even if an attacker obtains the correct password, MFA can prevent them from completing the login without the additional authentication factor.
 
 ## MITRE ATT&CK Reference
+
+The techniques below are relevant to the investigation of authentication failures. This controlled lab contains only one intentional failed logon and does not demonstrate an actual brute-force, password-guessing, or password-spraying attack.
 
 | Technique ID | Name | Tactic | Relevance |
 | --- | --- | --- | --- |
@@ -182,6 +241,6 @@ MITRE defines password guessing as repeatedly trying passwords against an accoun
 
 Relevant mitigations:
 
-M1036 — Account Use Policies
-M1027 — Password Policies
-M1032 — Multi-factor Authentication
++ `M1036` — Account Use Policies
++ `M1027` — Password Policies
++ `M1032` — Multi-factor Authentication
