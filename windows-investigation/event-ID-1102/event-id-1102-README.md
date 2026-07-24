@@ -2,29 +2,48 @@
 
 ## Context
 
-This lab investigates when the security log was deleted on a Windows endpoint using Windows Event Viewer.
+Clearing the Windows Security log removes records that may be needed to determine what happened on the system. If the action cannot immediately be connected to authorized administration, maintenance, or testing, it is serious enough to treat as possible evidence destruction until a legitimate reason is confirmed.
 
-If performs by an unauthorized user, it is an important indicator that something happened. This shows that something is bad enough happened that the performer wanted to hide from the security professionals.
+Event ID 1102 does not automatically prove that an attack occurred. However, it should trigger an investigation into who cleared the log, why it was cleared, and what activity occurred beforehand. Microsoft classifies Event ID 1102 as having medium-to-high importance for security monitoring.
 
-The focus of this investigation is Windows Event ID 1102, which records when a security log was clear.
+There are legitimate reasons for an authorized administrator to manually clear the Security log.
 
-Since there were only two events after the security record was wipe, I checked the other event, event ID 4688 Process Creation, and found the correlation between it and the security log wiped. The log wiped commanded was performed using PowerShell right before the log was deleted.
+One example is when the Security log has reached its configured maximum size while its retention policy is set to **Do not overwrite events**. In this situation, Windows may be unable to continue recording new security events. An authorized administrator may preserve or archive the existing log and then clear it so Windows can resume recording new events.
+
+Another legitimate reason is to reset an authorized staging, sandbox, or validation environment used to test a new security policy, audit configuration, logging structure, or system change before it is introduced into production. Clearing the previous events can provide a clean baseline for evaluating only the activity generated under the new configuration.
+
+A personal learning or training lab is a separate use case. In that environment, the log may be cleared to isolate newly generated events, reproduce specific activity, or make the resulting evidence easier to analyze. This should not be confused with a production-relevant staging environment used to validate changes before deployment.
+
+A technically defensible manual-clearing scenario is one in which:
+
+1. The log is full or causing an operational problem.
+2. Existing events are preserved, exported, or archived when they may still be needed.
+3. An authorized administrator performs the clearing.
+4. The reason, authorization, and time of the action are documented.
+
+Depending on the configured retention policy, Windows may overwrite older events or automatically archive a full log. Manual clearing is therefore not always necessary and should not be treated as a routine action without a documented reason.
+
+Potentially malicious reasons for clearing the Security log include:
+
++ Hiding evidence of an attempted or successful data exfiltration.
++ Hiding malware execution or files dropped onto the system.
++ Removing records that could help a security analyst reconstruct earlier activity.
++ Delaying an investigation by forcing the analyst to search for evidence through other logs and data sources.
+
+This investigation was performed directly on a standalone Windows 11 Home endpoint using Windows Event Viewer and the logging functions built into Windows. The system was not connected to Active Directory, and no SIEM was used. The investigation therefore focuses on evidence available directly from a non-domain-joined Windows endpoint.
+
+I attempted to enable command-line recording for process-creation events, but the **Process Command Line** field remained empty. Microsoft lists the **Include command line in process creation events** policy as supported on Windows Pro, Enterprise, Education, and IoT Enterprise editions, but not Windows Home. Windows 11 Home was therefore treated as the likely limitation in this investigation.
+
+Event ID 4688 could still show that `wevtutil.exe` was launched by `powershell.exe`, but it could not display the complete PowerShell command and its arguments. The process relationship was therefore recorded, while the exact command line could not be confirmed from Event ID 4688 alone.
+
+After the Security log was cleared, only two events were present in the log: Event ID 4688 and Event ID 1102. Event ID 4688 recorded the creation of `wevtutil.exe` with `powershell.exe` as its parent process immediately before Event ID 1102 recorded that the Security log had been cleared.
 
 The objectives of this investigation are to:
 
-+ To extract relevant information from the events records
-+ To determine whether the activity represents a legitimate behavior performed by the authorized people or by an attacker.
-+ To show a simple correlated event between Event ID 4688 and 1102.
-
-Examples of good reasons why an authorized admin perform it are:
-
-+ To reclaim the space on the computer when the log has taken up a lot of space.
-+ It is a lab.
-
-Examples of bad reasons why an attacker perform it:
-
-+ To hide their data exfiltration attempt.
-+ To hide their malware dropping which makes it more difficult for the security analyst to track and secure the system. If they don't know which application or file is infected with the malware, they will have to take time digging. By the time they find it, some damages may have already occured.
++ Extract relevant information from Event IDs 1102 and 4688.
++ Correlate the process-creation event with the clearing of the Security log.
++ Determine whether the activity was performed by an authorized person or may represent unauthorized activity.
++ Identify the evidence and limitations available when investigating the activity directly through Windows Event Viewer.
 
 ## Proof Of Concept
 
