@@ -118,7 +118,13 @@ Fig 7. Event ID 4688 — Details tab, XML view: EventData section.
 
 ### Inspecting Event ID 1102
 
-Event ID 1102 recorded when the security log is being cleared. This action is an important level of medium to high recommended for investigation. While there are legitimate reasons to clear the security log, the malicious reasons show direct support to malicious activities which are done to hide the trace of malicious activities. While the security log data cleared's time was 4/29/2026 4:31:01 PM which was not an unusual in this lab, the time that the security log was cleared can be an indicator pointing for further investigation such as an unusual time of 3:25 AM. However, timing is not a clear sign of malicious intent. If the timing is within a generic working hour, it will look less suspicious, but that alone does not mean it is malicious or none malicious. It is just easier for the inspector to miss or feel the immediate needs to inspect it.
+Event ID 1102 confirmed that the Windows Security log was cleared on April 29, 2026, at 4:31:01 PM.
+
+This event does not prove by itself whether the action was legitimate or malicious. However, it should still be investigated because clearing the Security log may remove records needed to understand what happened earlier on the system. While there are legitimate reasons to clear the log, the same action can also be used to hide traces of malicious activity.
+
+The time was expected in this lab because I performed the action intentionally during the afternoon. In another environment, the time of the event can help determine whether the activity requires more attention. For example, a log-clearing event at 3:25 AM may appear more suspicious than one during normal working hours.
+
+However, timing alone does not prove intent. Activity during normal working hours may look less suspicious, but it can still be unauthorized or malicious. It may simply be easier for an analyst to overlook or feel less urgency to investigate.
 
 ### Inspecting the Account and Login Session
 
@@ -181,5 +187,14 @@ Based on the known lab activity, the Security log clearing was legitimate and au
 + Confirm the action with the designated point of contact or authorized administrator, even when it was performed by an approved account. An authorized account can still be compromised or misused, especially when the activity occurs outside expected working or maintenance hours.
 
 ## MITRE ATT&CK Reference
+
+The activity investigated in this lab maps to the following MITRE ATT&CK framework details:
+
+| Tactic | Technique | ID | Detail |
+| --- | --- | --- | --- |
+| Defense Impairment | Disable or Modify Tools: Clear Windows Event Logs | [T1685.005](https://attack.mitre.org/techniques/T1685/005/) | Adversaries may clear Windows Event Logs to hide evidence of their activity. MITRE lists wevtutil cl security as one method used to clear the Windows Security log. |
+| Execution | Command and Scripting Interpreter: PowerShell | [T1059.001](https://attack.mitre.org/techniques/T1059/001/) | PowerShell was used to launch `wevtutil.exe`. Adversaries may also abuse PowerShell to execute commands and other programs on Windows systems. |
+
+These mappings describe adversary techniques that match the recorded actions. They do not mean that the authorized activity performed in this lab was malicious.
 
 ---
