@@ -122,13 +122,25 @@ Event ID 1102 recorded when the security log is being cleared. This action is an
 
 ### Inspecting the Account and Login Session
 
-Both event ID 1102 and 4688 showed the same `SubjectUserSid`, `SubjectUserName`, and `SubjectLogonId` fields. This means both events were performed under the same account and loin session.
+The `SubjectUserSid` and `SubjectUserName` fields identify the Windows account connected to the Security log clearing.
+
+The `SubjectLogonId`, `0x2f78a`, identifies the login session in which the action occurred. In this lab, these fields pointed to the account and login session I used to perform the action.
 
 ### Identifying the Process Behind the Log Clearing
 
-Since there were only two events, 1102 and 4688, on Windows Event Viewer after the security log was cleared, it was a good idea to check if the two events connected to one another. Taking a closer look at event ID 4688, its `ParentProcessName` pointed to `wevtutil.exe` which was used by PowerShell which was the tool I used to clear the security log according to the PoC. This evidence support that event ID 1102 security log was cleared and the action that cleared the security log was recorded in event ID 4688 which pointed to `wevtutil.exe` and to PowerShell. This support that event ID 1102 the security log was clear was likely the result of me clearing the log from PowerShell.
+After the Security log was cleared, only Event IDs 1102 and 4688 remained in Windows Event Viewer. Event ID 4688 was therefore reviewed as supporting evidence to identify the process connected to Event ID 1102.
 
-In addition, the `TokenElevationType`: `%%1937`, the `%%1937` means the new process received an elevated token. It indicates that the program ran with administrative privileges, such as through ***Run*** as ***administrator***. This furthur supports my PoC statement that PowerShell was opened as administrator.
+Event ID 1102 recorded the `ClientProcessId` as 22188. Event ID 4688 recorded the `NewProcessId` as `0x56ac`, which is the hexadecimal form of `22188`. The matching process IDs connect the process recorded in Event ID 4688 to the log-clearing action recorded in Event ID 1102.
+
+The NewProcessName identified the process as:
+
+`C:\Windows\System32\wevtutil.exe`
+
+The ParentProcessName identified the program that launched it as:
+
+`C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe`
+
+This shows that PowerShell launched `wevtutil.exe`, which was the Windows utility connected to the Security log clearing. This is consistent with the action documented in the Proof of Concept.
 
 ### Inspecting the Process Access and Evidence Limitation
 
@@ -142,7 +154,7 @@ The exact command used in the lab was documented separately in the Proof of Conc
 
 I attempted to enable command-line recording for process-creation events, but the field remained empty. Microsoft lists the Include command line in process creation events policy as supported on Windows Pro, Enterprise, Education, and IoT Enterprise editions, but not Windows Home. Windows 11 Home was therefore treated as the likely limitation in this investigation.
 
-Because the command line was not recorded, Event ID 4688 alone cannot prove that the arguments supplied to wevtutil.exe were cl Security. The connection is instead supported by the matching process IDs, the process chain, the timing of the two events, and the documented Proof of Concept.
+Because the command line was not recorded, Event ID 4688 alone cannot prove that the arguments supplied to `wevtutil.exe were cl Security`. The connection is instead supported by the matching process IDs, the process chain, the timing of the two events, and the documented Proof of Concept.
 
 ### Determining Whether the Action Was Authorized
 
