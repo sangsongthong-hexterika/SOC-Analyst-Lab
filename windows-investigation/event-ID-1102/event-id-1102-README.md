@@ -118,15 +118,15 @@ Fig 7. Event ID 4688 — Details tab, XML view: EventData section.
 
 ### Inspecting Event ID 1102
 
-Event ID 1102 recorded when the security log is being cleared. This action is an important level of medium to high recommended for investigation. While there are legitimate reasons to delete the security log, the malicious reasons show direct support to malicious activities which are done to hide the trace of malicious activities. While the security log data cleared's time was 4/29/2026 4:31:01 PM which was not an unusual in this lab, the time that the security log was cleared can be an indicator pointing for further investigation such as an unusual time of 3:25 AM. However, timing is not a clear sign of malicious intent. If the timing is within a generic working hour, it will look less suspicious.
+Event ID 1102 recorded when the security log is being cleared. This action is an important level of medium to high recommended for investigation. While there are legitimate reasons to clear the security log, the malicious reasons show direct support to malicious activities which are done to hide the trace of malicious activities. While the security log data cleared's time was 4/29/2026 4:31:01 PM which was not an unusual in this lab, the time that the security log was cleared can be an indicator pointing for further investigation such as an unusual time of 3:25 AM. However, timing is not a clear sign of malicious intent. If the timing is within a generic working hour, it will look less suspicious, but that alone does not mean it is malicious or none malicious. It is just easier for the inspector to miss or feel the immediate needs to inspect it.
 
 ### Inspecting the Account and Login Session
 
-Both event ID 1102 and 4688 showed the same SubjectUserSID field. This means both events were performed under the same account and loin session.
+Both event ID 1102 and 4688 showed the same `SubjectUserSid`, `SubjectUserName`, and `SubjectLogonId` fields. This means both events were performed under the same account and loin session.
 
 ### Identifying the Process Behind the Log Clearing
 
-Since there were only two events, 1102 and 4688, on Windows Event Viewer after the security log was cleared, it was a good idea to check if the two events connected to one another. Taking a closer look at event ID 4688, its `ParentProcessName` pointed to PowerShell which was the tool I used to clear the security log according to the PoC. This evidence support that event ID 1102 security log clearing was performed by the action shown in event ID 4688 which pointed to PowerShell.
+Since there were only two events, 1102 and 4688, on Windows Event Viewer after the security log was cleared, it was a good idea to check if the two events connected to one another. Taking a closer look at event ID 4688, its `ParentProcessName` pointed to `wevtutil.exe` which was used by PowerShell which was the tool I used to clear the security log according to the PoC. This evidence support that event ID 1102 security log was cleared and the action that cleared the security log was recorded in event ID 4688 which pointed to `wevtutil.exe` and to PowerShell. This support that event ID 1102 the security log was clear was likely the result of me clearing the log from PowerShell.
 
 ### Inspecting the Process Access and Evidence Limitation
 
