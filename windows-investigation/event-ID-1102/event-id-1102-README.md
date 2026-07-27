@@ -128,6 +128,8 @@ Both event ID 1102 and 4688 showed the same `SubjectUserSid`, `SubjectUserName`,
 
 Since there were only two events, 1102 and 4688, on Windows Event Viewer after the security log was cleared, it was a good idea to check if the two events connected to one another. Taking a closer look at event ID 4688, its `ParentProcessName` pointed to `wevtutil.exe` which was used by PowerShell which was the tool I used to clear the security log according to the PoC. This evidence support that event ID 1102 security log was cleared and the action that cleared the security log was recorded in event ID 4688 which pointed to `wevtutil.exe` and to PowerShell. This support that event ID 1102 the security log was clear was likely the result of me clearing the log from PowerShell.
 
+In addition, the `TokenElevationType`: `%%1937`, the `%%1937` means the new process received an elevated token. It indicates that the program ran with administrative privileges, such as through ***Run*** as ***administrator***. This furthur supports my PoC statement that PowerShell was opened as administrator.
+
 ### Inspecting the Process Access and Evidence Limitation
 
 While the `ParentProcessName` of the event ID 4688 point to the PowerShell which was the same as I stated in the PoC section that it was how I cleared the security log triggering event ID 1102, Windows Event Viewer did not capture the actual commandline I used from the PoC steps. This makes it less clear that event ID 4688 was my security log clearing attempt.
