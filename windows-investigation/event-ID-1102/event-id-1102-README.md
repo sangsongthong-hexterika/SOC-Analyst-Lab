@@ -116,15 +116,29 @@ Fig 7. Event ID 4688 — Details tab, XML view: EventData section.
 
 ## Analysis
 
-### Inspecting the Event Sequence
+### Inspecting Event ID 1102
 
-The two events occured at almost the same time with the slightly different.
+Event ID 1102 recorded when the security log is being cleared. This action is an important level of medium to high recommended for investigation. While there are legitimate reasons to delete the security log, the malicious reasons show direct support to malicious activities which are done to hide the trace of malicious activities. While the security log data cleared's time was 4/29/2026 4:31:01 PM which was not an unusual in this lab, the time that the security log was cleared can be an indicator pointing for further investigation such as an unusual time of 3:25 AM. However, timing is not a clear sign of malicious intent. If the timing is within a generic working hour, it will look less suspicious.
 
-### Comparing the Account and Logon Session
+### Inspecting the Account and Login Session
 
-### Correlating the Process IDs and Process Chain
+Both event ID 1102 and 4688 showed the same SubjectUserSID field. This means both events were performed under the same account and loin session.
 
-### Inspecting the Privilege Level and Evidence Limitation
+### Identifying the Process Behind the Log Clearing
+
+Since there were only two events, 1102 and 4688, on Windows Event Viewer after the security log was cleared, it was a good idea to check if the two events connected to one another. Taking a closer look at event ID 4688, its `ParentProcessName` pointed to PowerShell which was the tool I used to clear the security log according to the PoC. This evidence support that event ID 1102 security log clearing was performed by the action shown in event ID 4688 which pointed to PowerShell.
+
+### Inspecting the Process Access and Evidence Limitation
+
+While the `ParentProcessName` of the event ID 4688 point to the PowerShell which was the same as I stated in the PoC section that it was how I cleared the security log triggering event ID 1102, Windows Event Viewer did not capture the actual commandline I used from the PoC steps. This makes it less clear that event ID 4688 was my security log clearing attempt.
+
+However, considering the fact that there were only two event IDs recorded on Windows Event Viewer, it is more likely that event ID 4688 was the trigger cause for event ID 1102 to happen.
+
+Noticed that I tried to forced Windows Event Viewer to show the commandline I used on PowerShell but it failed. I suspected that because this lab was based on Windows 11 Home Edition. Microsoft listed the supported Windows version that allowed Windows Event Viewer to capture commandline from PowerShell. Windows 11 Home Edition was not in the support list.
+
+### Determining Whether the Action Was Authorized
+
+The action was authorized because I was the one who performed the security log clearing in this lab. I logged into this account, opened PowerShell with administrator privillege, and performed that security log clearing from PowerShell.
 
 ## Conclusion
 
