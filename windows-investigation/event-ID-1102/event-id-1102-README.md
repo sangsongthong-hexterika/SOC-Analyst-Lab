@@ -73,7 +73,7 @@ Fig 3. Event ID 1102 — Details tab, XML view: System section.
 
 Fig 4. Event ID 1102 — Details tab, XML view: UserData section.
 
-**Step 5.** Review the only other event remaining in the Security log, Event ID 4688, to identify process-creation activity that may be correlated with Event ID 1102.
+**Step 5.** Review the only other event remaining in the Security log, Event ID 4688, to identify the process activity recorded immediately before Event ID 1102.
 
 ![event-id-1102-correlate-4688-generic.png](./Images/event-id-1102-correlate-4688-generic.png)
 
@@ -87,7 +87,7 @@ Fig 6. Event ID 4688 — Details tab, XML view: System section.
 
 Fig 7. Event ID 4688 — Details tab, XML view: EventData section.
 
-**Step 6.** Extract the relevant fields from Event IDs 1102 and 4688 for correlation and analysis.
+**Step 6.** Extract the relevant fields from Event IDs 1102 and 4688 for review and analysis.
 
 ## Extracted Details
 
