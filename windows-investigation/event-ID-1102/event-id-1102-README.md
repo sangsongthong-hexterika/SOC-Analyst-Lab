@@ -140,7 +140,11 @@ Noticed that I tried to forced Windows Event Viewer to show the commandline I us
 
 ### Determining Whether the Action Was Authorized
 
-The action was authorized because I was the one who performed the security log clearing in this lab. I logged into this account, opened PowerShell with administrator privillege, and performed that security log clearing from PowerShell.
+The Security log clearing was authorized because I intentionally performed the action as the administrator of the endpoint for this lab.
+
+I logged into the account identified in Event ID 1102, opened PowerShell with administrator privileges, and ran the Security log-clearing command. The event data and supporting process information are consistent with the action documented in the Proof of Concept.
+
+In another environment, the account name and administrative access would not be enough to confirm that the activity was legitimate. An authorized account could be compromised or misused, so the action would still need to be verified with the account owner, designated point of contact, or approved maintenance records.
 
 ## Conclusion
 
