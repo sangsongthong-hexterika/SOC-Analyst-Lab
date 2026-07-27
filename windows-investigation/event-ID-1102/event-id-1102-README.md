@@ -132,11 +132,17 @@ In addition, the `TokenElevationType`: `%%1937`, the `%%1937` means the new proc
 
 ### Inspecting the Process Access and Evidence Limitation
 
-While the `ParentProcessName` of the event ID 4688 point to the PowerShell which was the same as I stated in the PoC section that it was how I cleared the security log triggering event ID 1102, Windows Event Viewer did not capture the actual commandline I used from the PoC steps. This makes it less clear that event ID 4688 was my security log clearing attempt.
+The `TokenElevationType` value was `%%1937`, which represents an elevated token. This supports the Proof of Concept, where PowerShell was opened with administrator privileges before the clearing command was executed.
 
-However, considering the fact that there were only two event IDs recorded on Windows Event Viewer, it is more likely that event ID 4688 was the trigger cause for event ID 1102 to happen.
+However, the `CommandLine` field in Event ID 4688 was empty. Windows Event Viewer recorded that PowerShell launched `wevtutil.exe`, but it did not capture the complete command or its arguments.
 
-Noticed that I tried to forced Windows Event Viewer to show the commandline I used on PowerShell but it failed. I suspected that because this lab was based on Windows 11 Home Edition. Microsoft listed the supported Windows version that allowed Windows Event Viewer to capture commandline from PowerShell. Windows 11 Home Edition was not in the support list.
+The exact command used in the lab was documented separately in the Proof of Concept:
+
+`wevtutil cl Security`
+
+I attempted to enable command-line recording for process-creation events, but the field remained empty. Microsoft lists the Include command line in process creation events policy as supported on Windows Pro, Enterprise, Education, and IoT Enterprise editions, but not Windows Home. Windows 11 Home was therefore treated as the likely limitation in this investigation.
+
+Because the command line was not recorded, Event ID 4688 alone cannot prove that the arguments supplied to wevtutil.exe were cl Security. The connection is instead supported by the matching process IDs, the process chain, the timing of the two events, and the documented Proof of Concept.
 
 ### Determining Whether the Action Was Authorized
 
