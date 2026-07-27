@@ -174,7 +174,7 @@ In another environment, the account name and administrative access would not be 
 
 Event ID 1102 confirmed that the Windows Security log was cleared on April 29, 2026, at 4:31:01 PM. The event identified the Windows account, login session, and client process connected to the action.
 
-The supporting Event ID 4688 record showed that PowerShell launched wevtutil.exe with an elevated token. Its NewProcessId matched the ClientProcessId recorded in Event ID 1102, supporting that this was the process connected to the Security log clearing.
+The supporting Event ID 4688 record showed that PowerShell launched `wevtutil.exe`, which received an elevated token. Its NewProcessId matched the ClientProcessId recorded in Event ID 1102, supporting that this was the process connected to the Security log clearing.
 
 The complete command line was not captured, which limited what could be confirmed from Event ID 4688 alone. However, the remaining endpoint evidence was consistent with the command documented in the Proof of Concept.
 
