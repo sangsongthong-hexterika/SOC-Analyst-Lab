@@ -150,7 +150,7 @@ This shows that PowerShell launched `wevtutil.exe`, which was the Windows utilit
 
 ### Inspecting the Process Access and Evidence Limitation
 
-The `TokenElevationType` value was `%%1937`, which represents an elevated token. This supports the Proof of Concept, where PowerShell was opened with administrator privileges before the clearing command was executed.
+The `TokenElevationType` value was `%%1937`, which represents an elevated token. This shows that `wevtutil.exe` ran with elevated access and supports the Proof of Concept, where PowerShell was opened with administrator privileges before the clearing command was executed.
 
 However, the `CommandLine` field in Event ID 4688 was empty. Windows Event Viewer recorded that PowerShell launched `wevtutil.exe`, but it did not capture the complete command or its arguments.
 
@@ -160,7 +160,7 @@ The exact command used in the lab was documented separately in the Proof of Conc
 
 I attempted to enable command-line recording for process-creation events, but the field remained empty. Microsoft lists the Include command line in process creation events policy as supported on Windows Pro, Enterprise, Education, and IoT Enterprise editions, but not Windows Home. Windows 11 Home was therefore treated as the likely limitation in this investigation.
 
-Because the command line was not recorded, Event ID 4688 alone cannot prove that the arguments supplied to `wevtutil.exe were cl Security`. The connection is instead supported by the matching process IDs, the process chain, the timing of the two events, and the documented Proof of Concept.
+Because the command line was not recorded, Event ID 4688 alone cannot prove that the arguments supplied to `wevtutil.exe` were `cl Security`. The connection is instead supported by the matching process IDs, the process chain, the timing of the two events, and the documented Proof of Concept.
 
 ### Determining Whether the Action Was Authorized
 
