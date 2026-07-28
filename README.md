@@ -100,3 +100,15 @@ This separate project focuses on offensive security techniques in an Active Dire
 ## Purpose
 
 This repository documents hands-on security investigation exercises developed while studying cybersecurity and building practical SOC analyst skills.
+
+## Third-Party Content
+
+This repository may include screenshots, trademarks, logos, product names, interface elements, or other materials from third-party operating systems, security tools, and software platforms used in the labs.
+
+Such materials remain the property of their respective owners and are included solely for educational, documentation, and professional portfolio purposes.
+
+The MIT License applies only to the original content created for this repository and does not grant rights to third-party intellectual property.
+
+## License
+
+This repository is licensed under the MIT License. See [`LICENSE`](LICENSE) for the full license text.
